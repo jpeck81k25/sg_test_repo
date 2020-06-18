@@ -1,0 +1,35 @@
+---
+title: "R markdown examples & templates"
+author: "jgp"
+date: "13 May 2020"
+ouptut: html_document
+output:
+ html_document
+#   toc: TRUE                   # add TOC; toc_float moves TOC to sidebar and makes look cooler
+#   toc_float:
+#     collpased: FALSE
+#     smooth_scroll: FALSE
+#   df_print: paged             # automatic way to format data tables
+#   theme: united               # adds theme to doc # https://www.datadreaming.org/post/r-markdown-theme-gallery/
+#   code_folding: hide          # allows for optional hiding of code, shows be default
+runtime: shiny
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(dplyr) 
+```
+
+# shiny prerendered
+
+```{r, echo = FALSE}
+sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30)
+
+renderPlot({
+  x <- faithful[, 2]  # Old Faithful Geyser data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+
+  # draw the histogram with the specified number of bins
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
+```
+

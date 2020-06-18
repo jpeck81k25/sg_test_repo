@@ -1,0 +1,167 @@
+---
+title: "R markdown examples & templates"
+author: "jgp"
+date: "13 May 2020"
+output:
+  html_document:
+  #ioslides_presentation:       # creates html slideshow
+    toc: TRUE                   # add TOC; toc_float moves TOC to sidebar and makes look cooler
+    toc_float:
+      collpased: FALSE
+      smooth_scroll: FALSE
+    df_print: paged             # automatic way to format data tables
+    theme: united               # adds theme to doc # https://www.datadreaming.org/post/r-markdown-theme-gallery/
+    #tufte::tufte_html:default  # adds theme from tufte package, not currently working
+    #rmdformats::material:      # adds theme from rmdformats package, nor currently owrking
+    code_folding: show          # allows for optional hiding of code, shows be default
+    #code_folding: hide         # allows for optional hiding of code, hides by default
+---
+
+# read in libraries
+
+## no options
+```{r}
+library(dplyr)
+```
+
+## hide messages
+```{r, message = FALSE}
+library(dplyr)
+```
+
+## hide code
+```{r, echo = FALSE}
+library(tufte) # used to bring in additional rmd themes
+library(prettydoc) # used to bring in additional rmd themes
+library(rmdformats) # used to bring in additional rmd themes
+```
+#### <doesn't look like anything to me>
+
+# read in data 
+
+## from csv
+```{r}
+pop_by_zip <- read.csv("../01_data/pop-by-zip-code.csv") %>%
+  rename(
+    zip = "ï..zip"
+  ) %>%
+  mutate(
+    zip = sprintf("%05g", zip)
+  )
+
+pop_by_zip
+```
+#### the formatting and display of the above code chunk is substantially improved by the knitr options <df_print: paged>
+
+## read in dat from package
+```{r}
+library(zipcode)
+data(zipcode)
+dim_zip <- zipcode
+rm(zipcode)
+dim_zip
+```
+
+# do some maths
+
+## manipulate 
+```{r}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+  
+```
+
+# use inline r code
+
+## these variables are dynamically from in memory data frame
+
+#### the zip code `r pop_by_zip$zip[1]` has the population `r pop_by_zip$y_2016[1]`
+
+# common options
+
+eval TRUE         Whether to evaluate the code and include its results  
+echo TRUE         Whether to display code along with its results  
+warning TRUE      Whether to display warnings  
+error FALSE       Whether to display errors  
+message TRUE      Whether to display messages  
+tidy FALSE        Whether to reformat code in a tidy way when displaying it  
+results "markup"  "markup", "asis", "hold", or "hide"  
+cache FALSE       Whether to cache results for future renders  
+comment "##"      Comment character to preface results with  
+fig.width 7       Width in inches for plots created in chunk  
+fig.height 7      Height in inches for plots created in chunk  
+
+## results
+### default
+```{r}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+```
+
+### markup
+```{r, results = 'markup'}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+```
+
+### asis
+```{r, results = 'asis'}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+```
+
+### hold
+```{r, results = 'hold'}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+  
+```
+
+### hide
+```{r, results = 'hide'}
+pop_by_state <- pop_by_zip %>%
+  left_join(
+    dim_zip
+    ,by = "zip"
+  ) %>%
+  group_by(state) %>%
+  summarize(pop = sum(y_2016, na.rm=T))
+            
+pop_by_state
+  
+```
